@@ -1,6 +1,14 @@
 class AnswersController < ApplicationController
   def create
-    answer = Answer.create!(question_id: params[:question_id], body: params[:body])
-    redirect_to(answer.question)
+    question = Question.find(params[:question_id])
+    answer = question.answers.build(body: params[:body])
+    if answer.save
+      redirect_to(answer.question)
+    else
+      render :new
+    end
+  end
+
+  def new
   end
 end
