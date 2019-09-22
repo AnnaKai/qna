@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :question do
-    title { "MyString" }
+    title { Faker::TvShows::RickAndMorty.quote }
     body { "MyText" }
 
     trait :invalid do
