@@ -21,7 +21,7 @@ feature 'User can create question', %q{
       fill_in 'Body', with: 'test test test'
 
       click_on 'Ask'
-      expect(page).to have_content 'You question has been successfully created.'
+      expect(page).to have_content 'Your question has been successfully created.'
       expect(page).to have_content 'Test question'
       expect(page).to have_content 'test test test'
 
