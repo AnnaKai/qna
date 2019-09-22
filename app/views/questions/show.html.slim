@@ -4,8 +4,10 @@ p= question.body
 - question.answers.each do |a|
   p= a.body
 
-= form_with(url: [question, @answer]) do |f|
-  = f.label :body, 'Your answer'
-  = f.text_area :body
-
-  = f.submit 'Submit'
+- if current_user
+  = form_with(url: [question, @answer]) do |f|
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+    = f.submit 'Submit'
+- else
+  p You need to sign in or sign up before continuing.
