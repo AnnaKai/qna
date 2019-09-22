@@ -1,2 +1,11 @@
 h1= question.title
 p= question.body
+
+- question.answers.each do |a|
+  p= a.body
+
+= form_with(url: [question, @answer]) do |f|
+  = f.label :body, 'Your answer'
+  = f.text_area :body
+
+  = f.submit 'Submit'
