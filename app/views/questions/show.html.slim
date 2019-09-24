@@ -5,7 +5,8 @@ p= question.body
   p= a.body
 
 - if current_user
-  = form_with(url: [question, @answer]) do |f|
+  = render 'shared/errors', resource: @answer
+  = form_with(url: [question, @answer], local: true) do |f|
     = f.label :body, 'Your answer'
     = f.text_area :body
     = f.submit 'Submit'

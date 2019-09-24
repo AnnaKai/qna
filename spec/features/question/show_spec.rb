@@ -25,13 +25,21 @@ feature 'User can answer questions', %q{
   given(:question) { create(:question) }
 
   describe 'Authenticated user' do
-    scenario 'posts an answer to the question' do
+    background do
       sign_in(create(:user))
       visit question_path(question)
+    end
+
+    scenario 'posts an answer to the question' do
       fill_in 'Your answer', with: 'Test answer'
       click_on 'Submit'
       expect(page).to have_content 'Your answer has been successfully created.'
       expect(page).to have_content 'Test answer'
+    end
+
+    scenario 'posts an answer and gets errors' do
+      click_on 'Submit'
+      expect(page).to have_content 'Body can\'t be blank'
     end
   end
 
