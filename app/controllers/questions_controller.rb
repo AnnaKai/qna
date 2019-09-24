@@ -1,5 +1,4 @@
 class QuestionsController < ApplicationController
-
   before_action :authenticate_user!, except: [:index, :show]
 
   def index
@@ -18,6 +17,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
+    @question.author = current_user
 
     if @question.save
       redirect_to @question, notice: 'Your question has been successfully created.'
