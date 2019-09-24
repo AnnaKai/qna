@@ -23,7 +23,7 @@ RSpec.describe AnswersController, type: :controller do
       end
       it 're-renders question view' do
         post :create, params: { question_id: question.id, body: nil }
-        expect(response).to render_template :new
+        expect(response).to render_template 'questions/show'
       end
     end
   end
