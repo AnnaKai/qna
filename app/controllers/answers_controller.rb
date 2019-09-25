@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   def create
+    answer.author = current_user
     if answer.save
       redirect_to(answer.question, notice: 'Your answer has been successfully created.')
     else
@@ -10,10 +11,15 @@ class AnswersController < ApplicationController
   def new
   end
 
+  def destroy
+    answer.destroy
+    redirect_to question_path(question), notice: 'You have successfully deleted your answer'
+  end
+
   private
 
   def answer
-    @answer = question.answers.build(body: params[:body])
+    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new(body: params[:body], question: question)
   end
 
   def question
@@ -21,5 +27,9 @@ class AnswersController < ApplicationController
   end
 
   helper_method :answer, :question
+
+  def answer_params
+    params.require(:answer).permit(:body)
+  end
 
 end
