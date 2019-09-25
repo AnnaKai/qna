@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :answer do
-    body { "MyText" }
+    association :author, factory: :user
+    body { "MyAnswerText" }
   end
 end

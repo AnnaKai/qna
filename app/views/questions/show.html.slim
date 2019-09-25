@@ -4,8 +4,10 @@ p= question.body
 - if current_user == question.author
   = link_to 'Delete question', question_path(question), method: :delete
 
-- question.answers.each do |a|
-  p= a.body
+- question.answers.each do |answer|
+  p= answer.body
+  - if current_user == answer.author
+    = link_to 'Delete answer', question_answer_path(question, answer), method: :delete
 
 - if current_user
   = render 'shared/errors', resource: @answer
