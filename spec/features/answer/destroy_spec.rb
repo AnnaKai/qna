@@ -12,6 +12,7 @@ feature 'User can remove their answers', %q{
     scenario 'Author deletes their answer' do
       sign_in(answer.author)
       visit question_path(question)
+      expect(page).to have_content answer.body
       click_on 'Delete answer'
       expect(page).to have_content 'You have successfully deleted your answer'
       expect(page).not_to have_content answer.body

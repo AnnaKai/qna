@@ -9,8 +9,8 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with valid attributes' do
       it 'saves a new answer in the db' do
-        expect { post :create, params: { question_id: question.id, body: body} }.to change { question.answers.count }.by(1)
-        expect(Answer.last).to have_attributes(question_id: question.id, body: body)
+        expect { post :create, params: { question_id: question.id, body: body } }.to change { question.answers.count }.by(1)
+        expect(Answer.last).to have_attributes(body: body, user_id: user.id)
       end
 
       it 'redirects to show view' do
