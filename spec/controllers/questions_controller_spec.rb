@@ -37,7 +37,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    before { login(user) }
+    before { login(question.author) }
     before { get :edit, params: { id: question } }
 
     it 'renders show view' do
@@ -71,7 +71,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    before { login(user) }
+    before { login(question.author) }
 
     context 'with valid attributes' do
       it 'assings the requested question to @question' do
@@ -109,9 +109,9 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { login(user) }
-
     let!(:question) { create(:question) }
+
+    before { login(question.author) }
 
     it 'deletes the question' do
       expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
