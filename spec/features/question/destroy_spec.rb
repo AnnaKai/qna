@@ -6,7 +6,6 @@ feature 'User can remove their questions', %q{
   I visit the question's page
 } do
 
-  given(:user) { create(:user) }
   given(:questions) { create_list(:question, 2) }
 
   context 'Authenticated user' do
@@ -21,11 +20,16 @@ feature 'User can remove their questions', %q{
     end
 
     scenario 'User can not delete someone else\'s question' do
-      sign_in(user)
+      sign_in(create(:user))
       visit question_path(questions.first)
-      expect(page).not_to have_content 'Delete question'
+      expect(page).not_to have_link 'Delete question'
     end
-
   end
 
+  context 'Unauthenticated user' do
+    scenario 'can not delete questions' do
+      visit question_path(questions.first)
+      expect(page).not_to have_link 'Delete answer'
+    end
+  end
 end
