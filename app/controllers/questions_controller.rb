@@ -27,7 +27,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if question.update(question_params)
+    if user_question.update(question_params)
       redirect_to @question
     else
       render :edit
@@ -35,7 +35,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question.destroy
+    user_question.destroy
     redirect_to questions_path, notice: 'You have successfully deleted your question'
   end
 
@@ -45,7 +45,11 @@ class QuestionsController < ApplicationController
     @question ||= params[:id] ? Question.find(params[:id]) : Question.new
   end
 
-  helper_method :question
+  def user_question
+    @question = current_user.questions.find(params[:id])
+  end
+
+  helper_method :question, :user_question
 
   def question_params
     params.require(:question).permit(:title, :body)
