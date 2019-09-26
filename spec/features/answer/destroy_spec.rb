@@ -5,14 +5,12 @@ feature 'User can remove their answers', %q{
   As an authenticated user
   I visit the question's page
 } do
-
-  given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given(:answer) { create(:answer) }
+  given(:question) { answer.question }
 
   context 'Authenticated user' do
     scenario 'Author deletes their answer' do
-      sign_in(question.author)
-      answer = create(:answer, question: question, author: question.author)
+      sign_in(answer.author)
       visit question_path(question)
       click_on 'Delete answer'
       expect(page).to have_content 'You have successfully deleted your answer'
@@ -20,8 +18,14 @@ feature 'User can remove their answers', %q{
     end
 
     scenario 'User can not delete someone else\'s answer' do
-      sign_in(user)
-      create(:answer, question: question)
+      sign_in(create(:user))
+      visit question_path(question)
+      expect(page).not_to have_link 'Delete answer'
+    end
+  end
+
+  context 'Unauthenticated user' do
+    scenario 'can not delete answers' do
       visit question_path(question)
       expect(page).not_to have_link 'Delete answer'
     end
