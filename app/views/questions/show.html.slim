@@ -1,12 +1,12 @@
 h1= question.title
 p= question.body
 
-- if current_user == question.author
+- if current_user&.author_of?(question)
   = link_to 'Delete question', question_path(question), method: :delete
 
 - question.answers.each do |answer|
   p= answer.body
-  - if current_user == answer.author
+  - if current_user&.author_of?(answer)
     = link_to 'Delete answer', question_answer_path(question, answer), method: :delete
 
 - if current_user
