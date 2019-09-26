@@ -23,7 +23,7 @@ feature 'User can remove their answers', %q{
       sign_in(user)
       create(:answer, question: question)
       visit question_path(question)
-      expect(page).not_to have_content 'Delete answer'
+      expect(page).not_to have_link 'Delete answer'
     end
   end
 end
