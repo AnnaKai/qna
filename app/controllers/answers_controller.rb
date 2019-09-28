@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = Answer.new(body: params[:body], question: question, author: current_user)
+    @answer = question.answers.new(body: params[:body], author: current_user, id: question.id)
     if @answer.save
       redirect_to(@answer.question, notice: 'Your answer has been successfully created.')
     else

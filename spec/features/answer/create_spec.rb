@@ -5,11 +5,12 @@ feature 'User can answer questions', %q{
   As an authenticated user
   I'd like to post an answer from question's page
 } do
-  given(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, id: user.id) }
 
   describe 'Authenticated user' do
     background do
-      sign_in(create(:user))
+      sign_in(user)
       visit question_path(question)
     end
 
