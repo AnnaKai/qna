@@ -15,7 +15,7 @@ class AnswersController < ApplicationController
       user_answer.destroy
       redirect_to question_path(question), notice: 'You have successfully deleted your answer'
     else
-      redirect_to question_path(question), notice: 'You\'re not eligible to delete that question'
+      redirect_to question_path(question), notice: 'You\'re not eligible to delete that answer'
     end
   end
 
