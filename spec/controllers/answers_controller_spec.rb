@@ -12,6 +12,10 @@ RSpec.describe AnswersController, type: :controller do
       context 'with valid attributes' do
         it 'saves a new answer in the db' do
           expect { post :create, params: { question_id: question.id, body: body } }.to change { question.answers.count }.by(1)
+        end
+
+        it 'saved answer has correct values' do
+          post :create, params: { question_id: question.id, body: body }
           expect(Answer.last).to have_attributes(body: body, user_id: user.id)
         end
 
@@ -20,6 +24,7 @@ RSpec.describe AnswersController, type: :controller do
           expect(response).to redirect_to(question)
         end
       end
+
       context 'with invalid attributes' do
         it 'does not save the answer' do
           expect { post :create, params: { question_id: question.id, body: nil } }.to_not change { Answer.count }
@@ -32,9 +37,13 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'unauthenticated user' do
-      it 'can not post an answer' do
-        post :create, params: { question_id: question.id, body: body }
+      before { post :create, params: { question_id: question.id, body: body } }
+
+      it 'does not save an answer' do
         expect(Answer.count).to eq(0)
+      end
+
+      it 'gets asked to authorize' do
         expect(response).to redirect_to(new_user_session_path)
       end
     end
