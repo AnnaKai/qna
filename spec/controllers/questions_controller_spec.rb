@@ -51,14 +51,20 @@ RSpec.describe QuestionsController, type: :controller do
       before { login(user) }
 
       context 'with valid attributes' do
+        let(:question_form) { attributes_for(:question) }
+
         it 'saves a new question in the db' do
-          question_form = attributes_for(:question)
           expect { post :create, params: { question: question_form } }.to change(Question, :count).by(1)
+
+        end
+
+        it 'saved question has correct values including an author' do
+          post :create, params: { question: question_form }
           expect(Question.last).to have_attributes(title: question_form[:title], body: question_form[:body], user_id: user.id)
         end
 
         it 'redirects to show view' do
-          post :create, params: {question: attributes_for(:question)}
+          post :create, params: { question: question_form }
           expect(response).to redirect_to assigns(:question)
         end
       end
@@ -130,23 +136,41 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:question) { create(:question) }
+    let(:user) { create(:user) }
+    let!(:question) { create(:question, author: user) }
 
-    context 'authenticated user' do
-      before { login(question.author) }
-      it 'deletes the question' do
-        expect { delete :destroy, params: {id: question} }.to change(Question, :count).by(-1)
+    context 'authenticated' do
+      context 'author' do
+        before { login(question.author) }
+
+        it 'deletes the question' do
+          expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+        end
+
+        it 'redirects to index' do
+          delete :destroy, params: {id: question}
+          expect(response).to redirect_to questions_path
+        end
       end
 
-      it 'redirects to index' do
-        delete :destroy, params: {id: question}
-        expect(response).to redirect_to questions_path
+      context 'not an author' do
+        before { login(create(:user)) }
+
+        it 'does not delete the question' do
+          expect { delete :destroy, params: { id: question.id } }.not_to change(Question, :count)
+        end
+
+        it 're-renders the question' do
+          delete :destroy, params: { id: question.id }
+          expect(response).to redirect_to question
+        end
       end
     end
 
     context 'unauthenticated user' do
-      it 'can not delete a question' do
-        delete :destroy, params: {id: question}
+      before { delete :destroy, params: { id: question } }
+
+      it 'gets asked to authorize' do
         expect(response).to redirect_to(new_user_session_path)
       end
     end
