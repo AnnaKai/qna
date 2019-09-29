@@ -14,11 +14,13 @@ feature 'User can answer questions', %q{
       visit question_path(question)
     end
 
-    scenario 'posts an answer to the question' do
-      fill_in 'Your answer', with: 'Test answer'
-      click_on 'Submit'
-      expect(page).to have_content 'Your answer has been successfully created.'
-      expect(page).to have_content 'Test answer'
+    scenario 'posts several answers to the question' do
+      2.times do
+        fill_in 'Your answer', with: 'Test answer'
+        click_on 'Submit'
+        expect(page).to have_content 'Your answer has been successfully created.'
+        expect(page).to have_content 'Test answer'
+      end
     end
 
     scenario 'posts an answer and gets errors' do
