@@ -12,28 +12,28 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'with valid attributes' do
         it 'saves a new answer in the db' do
-          expect { post :create, params: { question_id: question.id, body: body } }.to change { question.answers.count }.by(1)
+          expect { post :create, params: { question_id: question.id, body: body }, format: :js }.to change { question.answers.count }.by(1)
         end
 
         it 'saved answer has correct values including an author' do
-          post :create, params: { question_id: question.id, body: body }
+          post :create, params: { question_id: question.id, body: body }, format: :js
           expect(Answer.last).to have_attributes(body: body, user_id: user.id)
         end
 
         it 'redirects to show view' do
-          post :create, params: { question_id: question.id, body: body }
-          expect(response).to redirect_to(question)
+          post :create, params: { question_id: question.id, body: body }, format: :js
+          expect(response).to render_template :create
         end
       end
 
       context 'with invalid attributes' do
         it 'does not save the answer' do
-          expect { post :create, params: { question_id: question.id, body: nil } }.to_not change { Answer.count }
+          expect { post :create, params: { question_id: question.id, body: nil }, format: :js }.to_not change { Answer.count }
         end
 
         it 're-renders question view' do
-          post :create, params: { question_id: question.id, body: nil }
-          expect(response).to render_template 'questions/show'
+          post :create, params: { question_id: question.id, body: nil }, format: :js
+          expect(response).to render_template :create
         end
       end
     end

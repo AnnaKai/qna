@@ -2,12 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = Answer.new(body: params[:body], author: current_user, question_id: question.id)
-    if @answer.save
-      redirect_to(@answer.question, notice: 'Your answer has been successfully created.')
-    else
-      render 'questions/show'
-    end
+    @answer = question.answers.create(body: params[:body], author: current_user, question_id: question.id)
   end
 
   def destroy
