@@ -3,8 +3,8 @@ p= answer.body
   = link_to 'Delete answer', answer_path(question, answer), method: :delete
   = link_to 'Edit'
 
-= form_with model: answer do |f|
-  = f.label :body, 'Your answer'
+= form_with model: answer, class: 'd-none' do |f|
+  = f.label :body, 'Your corrected answer'
   = f.text_area :body
   = f.submit 'Submit'
 
