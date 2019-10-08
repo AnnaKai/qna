@@ -5,6 +5,11 @@ class AnswersController < ApplicationController
     @answer = question.answers.create(body: params[:body], author: current_user, question_id: question.id)
   end
 
+  def update
+    @answer = Answer.find(params[:id])
+    @answer.update(answer_params)
+  end
+
   def destroy
     if current_user.author_of?(answer)
       user_answer.destroy
@@ -29,5 +34,9 @@ class AnswersController < ApplicationController
   end
 
   helper_method :answer, :user_answer, :question
+
+  def answer_params
+    params.require(:answer).permit(:body)
+  end
 
 end
