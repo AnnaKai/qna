@@ -17,7 +17,7 @@ feature 'User can edit his answer', %q{
   end
 
   describe 'Authenticated user' do
-    scenario 'edits his answer' do
+    scenario 'edits his answer', js: true do
       sign_in(answer.author)
       visit question_path(question)
 
