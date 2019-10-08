@@ -1,1 +1,10 @@
 p= answer.body
+- if current_user&.author_of?(answer)
+  = link_to 'Delete answer', answer_path(question, answer), method: :delete
+  = link_to 'Edit'
+
+= form_with model: answer do |f|
+  = f.label :body, 'Your answer'
+  = f.text_area :body
+  = f.submit 'Create'
+
