@@ -11,8 +11,8 @@ p= question.body
   .answer-errors
   = render 'shared/errors', resource: @answer
 
-  = form_with(url: [question, @answer]) do |f|
-    = f.label :body, 'Your answer'
+  = form_with(url: [question, @answer], class: 'new-answer') do |f|
+    = f.label :body, 'Answer'
     = f.text_area :body
     = f.submit 'Submit'
 - else
