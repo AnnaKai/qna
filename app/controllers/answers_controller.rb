@@ -13,10 +13,10 @@ class AnswersController < ApplicationController
 
   def destroy
     if current_user.author_of?(answer)
-      user_answer.destroy
-      redirect_to question_path(question), notice: 'You have successfully deleted your answer'
+      answer.destroy
+      redirect_to question_path(answer.question), notice: 'You have successfully deleted your answer'
     else
-      redirect_to question_path(question), notice: 'You\'re not eligible to delete that answer'
+      redirect_to question_path(answer.question), notice: 'You\'re not eligible to delete that answer'
     end
   end
 
@@ -26,15 +26,11 @@ class AnswersController < ApplicationController
     @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
   end
 
-  def user_answer
-    @answer = current_user.answers.find(params[:id])
-  end
-
   def question
     @question ||= Question.find(params[:question_id])
   end
 
-  helper_method :answer, :user_answer, :question
+  helper_method :answer, :question
 
   def answer_params
     params.require(:answer).permit(:body)

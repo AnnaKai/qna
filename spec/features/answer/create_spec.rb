@@ -16,7 +16,7 @@ feature 'User can answer questions', %q{
 
     scenario 'posts several answers to the question', js: true do
       2.times do
-        fill_in 'Your answer', with: 'Test answer'
+        fill_in 'Answer', with: 'Test answer'
         click_on 'Submit'
         expect(page).to have_content 'Test answer'
       end
