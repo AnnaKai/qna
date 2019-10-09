@@ -24,7 +24,7 @@ feature 'User can edit his answer', %q{
       click_on 'Edit'
 
       within '.answers' do
-        fill_in 'Your answer', with: 'new edited answer'
+        fill_in 'Your corrected answer', with: 'new edited answer'
         click_on 'Submit'
 
         expect(page).to_not have_content answer.body
