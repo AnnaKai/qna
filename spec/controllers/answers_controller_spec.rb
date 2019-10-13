@@ -122,13 +122,9 @@ RSpec.describe AnswersController, type: :controller do
         before { sign_in(user) }
 
         it 'deletes their answer in the db' do
-          expect { delete :destroy, params: { question_id: question.id, id: answer.id } }.to change(Answer, :count).by(-1)
+          expect { delete :destroy, params: { question_id: question.id, id: answer.id, format: :js } }.to change(Answer, :count).by(-1)
         end
 
-        it 'gets redirected to the initial question' do
-          delete :destroy, params: { question_id: question.id, id: answer.id }
-          expect(response).to redirect_to question
-        end
       end
 
       context 'not an author' do

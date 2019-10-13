@@ -9,12 +9,13 @@ feature 'User can remove their answers', %q{
   given(:question) { answer.question }
 
   context 'Authenticated user' do
-    scenario 'Author deletes their answer' do
+    scenario 'Author deletes their answer', js: true do
       sign_in(answer.author)
       visit question_path(question)
       expect(page).to have_content answer.body
-      click_on 'Delete answer'
-      expect(page).to have_content 'You have successfully deleted your answer'
+      accept_confirm do
+        click_on 'Delete'
+      end
       expect(page).not_to have_content answer.body
     end
 
