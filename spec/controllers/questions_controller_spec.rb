@@ -19,7 +19,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-
     before { get :show, params: { id: question } }
 
     it 'renders show view' do
@@ -46,7 +45,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-
     context 'authenticated user' do
       before { login(user) }
 
@@ -55,7 +53,6 @@ RSpec.describe QuestionsController, type: :controller do
 
         it 'saves a new question in the db' do
           expect { post :create, params: { question: question_form } }.to change(Question, :count).by(1)
-
         end
 
         it 'saved question has correct values including an author' do
