@@ -8,7 +8,7 @@ feature 'User can edit his answer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  given(:answer) { create(:answer, question: question, author: user) }
+  given(:answers) { create_list(:answer, 2, question: question, author: user) }
 
   scenario 'Unauthenticated user can not edit answers' do
     visit question_path(question)
@@ -18,17 +18,18 @@ feature 'User can edit his answer', %q{
 
   describe 'Authenticated user' do
     scenario 'edits his answer', js: true do
-      sign_in(answer.author)
+      sign_in(answers.first.author)
       visit question_path(question)
 
-      click_on 'Edit'
+      find("[data-answer-id=\"#{answers.first.id}\"]").click
 
       within '.answers' do
         fill_in 'Your corrected answer', with: 'new edited answer'
         click_on 'Submit'
 
-        expect(page).to_not have_content answer.body
+        expect(page).to have_content answers.second.body
         expect(page).to have_content 'new edited answer'
+        expect(page).to_not have_content answers.first.body
         expect(page).to_not have_selector 'textarea'
       end
     end
