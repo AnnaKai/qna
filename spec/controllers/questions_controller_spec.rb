@@ -20,7 +20,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #show' do
 
-    before { get :show, params: {id: question} }
+    before { get :show, params: { id: question } }
 
     it 'renders show view' do
       expect(response).to render_template :show
@@ -38,7 +38,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
     before { login(question.author) }
-    before { get :edit, params: {id: question} }
+    before { get :edit, params: { id: question } }
 
     it 'renders show view' do
       expect(response).to render_template :edit
@@ -90,46 +90,64 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     context 'authenticated user' do
-      before { login(question.author) }
+      context 'author' do
+        before { login(question.author) }
 
-      context 'with valid attributes' do
-        it 'assings the requested question to @question' do
-          patch :update, params: { id: question, question: attributes_for(:question) }
-          expect(assigns(:question)).to eq question
+        context 'with valid attributes' do
+          it 'assings the requested question to @question' do
+            patch :update, params: { id: question, question: attributes_for(:question) }
+            expect(assigns(:question)).to eq question
+          end
+
+          it 'changes question attributes' do
+            patch :update, params: { id: question, question: { title: 'new title', body: 'new body'} }
+            question.reload
+
+            expect(question.title).to eq 'new title'
+            expect(question.body).to eq 'new body'
+          end
+
+          it 'redirects to updated question' do
+            patch :update, params: {id: question, question: attributes_for(:question)}
+            expect(response).to redirect_to question
+          end
         end
 
-        it 'changes question attributes' do
-          patch :update, params: { id: question, question: {title: 'new title', body: 'new body'} }
-          question.reload
+        context 'with invalid attributes' do
+          before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
 
-          expect(question.title).to eq 'new title'
-          expect(question.body).to eq 'new body'
-        end
+          it 'does not change question' do
+            question.reload
+            expect(question.title).to eq(question.title)
+            expect(question.body).to eq('MyText')
+          end
 
-        it 'redirects to updated question' do
-          patch :update, params: { id: question, question: attributes_for(:question) }
-          expect(response).to redirect_to question
+          it 're-renders edit view' do
+            expect(response).to render_template :edit
+          end
         end
       end
 
-      context 'with invalid attributes' do
-        before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+      context 'not an author' do
+        before { login(user) }
+        before { patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } } }
 
-        it 'does not change question' do
+        it 'does not update the question' do
           question.reload
+
           expect(question.title).to eq(question.title)
           expect(question.body).to eq('MyText')
         end
 
-        it 're-renders edit view' do
-          expect(response).to render_template :edit
+        it 'redirects to the question' do
+          expect(response).to redirect_to questions_path(question)
         end
       end
     end
 
     context 'unauthenticated user' do
       it 'can not update a question' do
-        patch :update, params: {id: question, question: attributes_for(:question)}
+        patch :update, params: { id: question, question: attributes_for(:question) }
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -144,7 +162,7 @@ RSpec.describe QuestionsController, type: :controller do
         before { login(question.author) }
 
         it 'deletes the question' do
-          expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+          expect {delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
         end
 
         it 'redirects to index' do

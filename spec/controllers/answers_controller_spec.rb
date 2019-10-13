@@ -53,35 +53,61 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #update' do
     let(:question) { create(:question) }
-    let!(:answer) { create(:answer, question: question, author: user) }
-    let(:user) { create(:user) }
+    let!(:answer) { create(:answer, question: question) }
     let(:body) { Faker::Lorem.paragraph }
+    let(:user) { create(:user) }
 
-    before { sign_in(user) }
+    context 'authenticated user' do
+      context 'author' do
+        before { login(answer.author) }
 
-    context 'with valid attributes' do
-      it 'changes answer attributes' do
-        patch :update, params: { id: answer, answer: { body: body }, format: :js }
-        answer.reload
-        expect(answer.body).to eq body
+        context 'with valid attributes' do
+          it 'changes answer attributes' do
+            patch :update, params: { id: answer, answer: { body: body }, format: :js }
+            answer.reload
+            expect(answer.body).to eq body
+          end
+
+          it 'renders update view' do
+            patch :update, params: { id: answer, answer: { body: 'New body' }, format: :js }
+            expect(response).to render_template :update
+          end
+        end
+
+        context 'with invalid attributes' do
+          it 'does not change answer attributes' do
+            expect do
+              patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
+            end.to_not change(answer, :body)
+          end
+
+          it 'renders update view' do
+            patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
+            expect(response).to render_template :update
+          end
+        end
       end
 
-      it 'renders update view' do
-        patch :update, params: { id: answer, answer: { body: 'New body' }, format: :js }
-        expect(response).to render_template :update
+      context 'not an author' do
+        before { login(user) }
+
+        it 'does not change answer attributes' do
+          expect do
+            patch :update, params: { id: answer, answer: { body: body }, format: :js }
+          end.to_not change(answer, :body)
+        end
+
+        it 'sees forbidden error' do
+          patch :update, params: { id: answer, answer: { body: body }, format: :js }
+          expect(response).to have_http_status(:forbidden)
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      it 'does not change answer attributes' do
-        expect do
-          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
-        end.to_not change(answer, :body)
-      end
-
-      it 'renders update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
-        expect(response).to render_template :update
+    context 'unauthenticated user' do
+      it 'gets asked to authorize' do
+        patch :update, params: { id: answer, answer: { body: body }, format: :js }
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

@@ -27,10 +27,15 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if user_question.update(question_params)
-      redirect_to @question
+    user_question = Question.find(params[:id])
+    if current_user.author_of?(user_question)
+      if user_question.update(question_params)
+        redirect_to question
+      else
+        render :edit
+      end
     else
-      render :edit
+      redirect_to questions_path(question), notice: 'You\'re not eligible to edit that question'
     end
   end
 
