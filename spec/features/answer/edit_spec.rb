@@ -34,8 +34,19 @@ feature 'User can edit his answer', %q{
       end
     end
 
-    scenario 'edits his answer with errors' do
+    scenario 'edits his answer with errors', js: true do
+      sign_in(answers.first.author)
+      visit question_path(question)
 
+      find("[data-answer-id=\"#{answers.first.id}\"]").click
+
+      within '.answers' do
+        fill_in 'Your corrected answer', with: ''
+        click_on 'Submit'
+        expect(page).to have_content answers.first.body
+        expect(page).to have_selector 'textarea'
+      end
+      expect(page).to have_content 'Body can\'t be blank'
     end
 
     scenario 'tries to edit other users\' answers' do
