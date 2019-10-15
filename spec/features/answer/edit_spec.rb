@@ -21,7 +21,7 @@ feature 'User can edit his answer', %q{
       sign_in(answers.first.author)
       visit question_path(question)
 
-      find("[data-answer-id=\"#{answers.first.id}\"]").click
+      find(".edit-answer-link[data-answer-id=\"#{answers.first.id}\"]").click
 
       within '.answers' do
         fill_in 'Your corrected answer', with: 'new edited answer'
@@ -38,7 +38,7 @@ feature 'User can edit his answer', %q{
       sign_in(answers.first.author)
       visit question_path(question)
 
-      find("[data-answer-id=\"#{answers.first.id}\"]").click
+      find(".edit-answer-link[data-answer-id=\"#{answers.first.id}\"]").click
 
       within '.answers' do
         fill_in 'Your corrected answer', with: ''
