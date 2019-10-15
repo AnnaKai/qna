@@ -6,11 +6,12 @@ feature 'User chooses the best answer', %q{
   I'd like to be able to choose one answer
 } do
 
+  given!(:question) { create(:question) }
+  given!(:answers) { create_list(:answer, 3, question: question) }
+
   context 'authenticated user' do
     context 'author' do
-      scenario 'selects the best answer', js: true do
-        question = create(:question)
-        answers = create_list(:answer, 3, question: question)
+      scenario 'selects the only one best answer', js: true do
         sign_in(question.author)
         visit question_path(question)
 
@@ -28,5 +29,10 @@ feature 'User chooses the best answer', %q{
   end
 
   context 'unauthenicated user' do
+    scenario 'sees the best answer' do
+      question.update!(best_answer: answers.first)
+      visit question_path(question)
+      expect(page).to have_content 'The best answer'
+    end
   end
 end
