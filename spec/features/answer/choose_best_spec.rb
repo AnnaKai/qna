@@ -11,11 +11,18 @@ feature 'User chooses the best answer', %q{
 
   context 'authenticated user' do
     context 'author' do
-      scenario 'selects the only one best answer', js: true do
+      scenario 'selects and saves the best answer', js: true do
         sign_in(question.author)
         visit question_path(question)
 
         find(".choose-answer[data-answer-id=\"#{answers.second.id}\"]").click
+
+        within "#answer-#{answers.second.id}" do
+          expect(page).to have_content 'The best answer'
+          expect(page).to_not have_content 'Mark as best'
+        end
+
+        visit question_path(question)
 
         within "#answer-#{answers.second.id}" do
           expect(page).to have_content 'The best answer'
