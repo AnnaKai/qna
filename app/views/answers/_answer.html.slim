@@ -3,13 +3,14 @@ div id="answer-#{answer.id}"
   - if current_user&.author_of?(answer)
     = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
     = link_to 'Delete', answer, method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: 'delete-answer'
-  - if answer.id == question.best_answer&.id
+
+  - if current_user&.author_of?(question) && answer.id != question.best_answer_id
+    = link_to 'Mark as best', question, method: :patch, class: 'btn btn-primary choose-answer', remote: true, data: {params: "question[best_answer_id]=#{answer.id}", answer_id: answer.id}
+
+  - if answer.id == question.best_answer_id
     span The best answer
-  - else
-    = link_to 'Mark as best', question, method: :patch, class: 'btn btn-primary choose-answer', remote: true, data: { params: "question[best_answer_id]=#{answer.id}", answer_id: answer.id }
 
   = form_with model: answer, class: 'd-none', html: { id: "edit-answer-#{answer.id}" } do |f|
     = f.label :body, 'Your corrected answer'
     = f.text_area :body
     = f.submit 'Submit'
-

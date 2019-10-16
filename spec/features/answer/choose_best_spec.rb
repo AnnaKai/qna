@@ -8,6 +8,7 @@ feature 'User chooses the best answer', %q{
 
   given!(:question) { create(:question) }
   given!(:answers) { create_list(:answer, 3, question: question) }
+  given(:user) { create(:user) }
 
   context 'authenticated user' do
     context 'author' do
@@ -32,6 +33,11 @@ feature 'User chooses the best answer', %q{
     end
 
     context 'not an author' do
+      scenario 'can not select the best answer' do
+        sign_in(user)
+        visit question_path(question)
+        expect(page).to_not have_content 'Mark as best'
+      end
     end
   end
 
