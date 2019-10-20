@@ -5,12 +5,4 @@ $(document).on('turbolinks:load', function() {
         var answerId = $(this).data('answerId');
         $('form#edit-answer-' + answerId).removeClass('d-none');
     });
-    $('.answers').on('click', '.choose-answer', function(e) {
-        e.preventDefault();
-        $(this).hide();
-        $(this).parent()
-            .append(
-                $('<span>The best answer</span>')
-            );
-    });
 });
