@@ -105,8 +105,13 @@ RSpec.describe QuestionsController, type: :controller do
           end
 
           it 'redirects to updated question' do
-            patch :update, params: {id: question, question: attributes_for(:question)}
+            patch :update, params: { id: question, question: attributes_for(:question) }
             expect(response).to redirect_to question
+          end
+
+          it 'renders nothing when best answer is updated via AJAX' do
+            patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+            expect(response).to have_http_status(:no_content)
           end
         end
 

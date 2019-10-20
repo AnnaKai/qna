@@ -1,19 +1,22 @@
-h1= question.title
-p= question.body
+div class="container"
+  div class="row"
+    div class="col-md-12"
+      h1= question.title
+      p= question.body
 
-- if current_user&.author_of?(question)
-  = link_to 'Delete question', question_path(question), method: :delete
+      - if current_user&.author_of?(question)
+        = link_to 'Delete question', question_path(question), method: :delete
 
-.answers
-  = render partial: 'answers/answer', collection: question.sorted_answers
+      .answers class="py-5"
+        = render partial: 'answers/answer', collection: question.sorted_answers
 
-- if current_user
-  .answer-errors
-  = render 'shared/errors', resource: @answer
+      - if current_user
+        .answer-errors
+        = render 'shared/errors', resource: @answer
 
-  = form_with(url: [question, @answer], class: 'new-answer') do |f|
-    = f.label :body, 'Answer'
-    = f.text_area :body
-    = f.submit 'Submit'
-- else
-  p You need to sign in or sign up before continuing.
+        = form_with(url: [question, @answer], class: 'new-answer') do |f|
+          = f.label :body, 'Answer'
+          = f.text_area :body
+          = f.submit 'Submit'
+      - else
+        p You need to sign in or sign up before continuing.
