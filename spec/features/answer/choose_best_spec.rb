@@ -42,10 +42,13 @@ feature 'User chooses the best answer', %q{
   end
 
   context 'unauthenicated user' do
-    scenario 'sees the best answer' do
-      question.update!(best_answer: answers.first)
+    scenario 'sees the best answer on top' do
+      question.update!(best_answer: answers.third)
       visit question_path(question)
-      expect(page).to have_content 'The best answer'
+      within first(".answer") do
+        expect(page).to have_content answers.third.body
+        expect(page).to have_content 'The best answer'
+      end
     end
   end
 end
