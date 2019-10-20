@@ -24,7 +24,6 @@ feature 'User chooses the best answer', %q{
           expect(page).to_not have_content 'Mark as best'
         end
       end
-
     end
 
     context 'not an author' do

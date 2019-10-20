@@ -30,7 +30,10 @@ class QuestionsController < ApplicationController
     user_question = Question.find(params[:id])
     if current_user.author_of?(user_question)
       if user_question.update(question_params)
-        redirect_to question
+        respond_to do |format|
+          format.html { redirect_to question }
+          format.js {}
+        end
       else
         render :edit
       end
