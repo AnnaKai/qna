@@ -10,8 +10,6 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
-    else
-      head :forbidden
     end
   end
 
