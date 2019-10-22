@@ -91,10 +91,6 @@ RSpec.describe AnswersController, type: :controller do
           end.to_not change(answer, :body)
         end
 
-        it 'sees forbidden error' do
-          patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
-          expect(response).to have_http_status(:forbidden)
-        end
       end
     end
 
