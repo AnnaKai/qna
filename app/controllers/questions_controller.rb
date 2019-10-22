@@ -27,18 +27,8 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    user_question = Question.find(params[:id])
-    if current_user.author_of?(user_question)
-      if user_question.update(question_params)
-        respond_to do |format|
-          format.html { redirect_to question }
-          format.js {}
-        end
-      else
-        render :edit
-      end
-    else
-      redirect_to questions_path(question), notice: 'You\'re not eligible to edit that question'
+    if current_user.author_of?(question)
+      question.update(question_params)
     end
   end
 
