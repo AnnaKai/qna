@@ -141,9 +141,16 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'unauthenticated user' do
-      it 'can not update a question' do
+      it 'gets asked to authorize' do
         patch :update, params: { id: question, question: attributes_for(:question) }
         expect(response).to redirect_to(new_user_session_path)
+      end
+
+      it 'does not change question attributes' do
+        question.reload
+        expect do
+          patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+        end.to_not change(question, :body)
       end
     end
   end

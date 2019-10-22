@@ -99,6 +99,12 @@ RSpec.describe AnswersController, type: :controller do
         patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
         expect(response).to have_http_status(:unauthorized)
       end
+
+      it 'does not change answer attributes' do
+        expect do
+          patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
+        end.to_not change(question, :body)
+      end
     end
   end
 
