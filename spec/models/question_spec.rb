@@ -10,11 +10,10 @@ RSpec.describe Question, type: :model do
   describe '#sorted_answers' do
     it 'the best answer is the first' do
       question = create(:question)
-      answer = create(:answer, question: question)
-      best_answer = create(:answer, question: question)
-      question.update(best_answer_id: best_answer.id)
+      answer = create_list(:answer, 3, question: question)
+      question.update(best_answer_id: answer.second.id)
 
-      expect(question.sorted_answers.all.to_a).to eq([best_answer, answer])
+      expect(question.sorted_answers.all.to_a).to eq([answer.second, answer.first, answer.last])
     end
   end
 end
