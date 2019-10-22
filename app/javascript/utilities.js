@@ -12,4 +12,9 @@ $(document).on('turbolinks:load', function() {
         $answer.addClass('best');
         $('.answers').prepend($answer);
     });
+    $('.question').on('click', '.edit-question-link', function(event) {
+        event.preventDefault();
+        $(this).hide();
+        $('.question form').removeClass('d-none');
+    });
 });

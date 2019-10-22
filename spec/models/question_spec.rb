@@ -7,14 +7,12 @@ RSpec.describe Question, type: :model do
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
 
-  it { should belong_to(:best_answer).optional }
-
   describe '#sorted_answers' do
     it 'the best answer is the first' do
       question = create(:question)
       answer = create(:answer, question: question)
       best_answer = create(:answer, question: question)
-      question.update(best_answer: best_answer)
+      question.update(best_answer_id: best_answer.id)
 
       expect(question.sorted_answers.all.to_a).to eq([best_answer, answer])
     end
