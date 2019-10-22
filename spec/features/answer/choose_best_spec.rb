@@ -37,7 +37,7 @@ feature 'User chooses the best answer', %q{
 
   context 'unauthenicated user' do
     scenario 'sees the best answer on top' do
-      question.update!(best_answer: answers.third)
+      question.update!(best_answer_id: answers.third.id)
       visit question_path(question)
       within first(".answer") do
         expect(page).to have_content answers.third.body

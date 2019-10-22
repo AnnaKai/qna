@@ -54,8 +54,8 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #update' do
     let(:question) { create(:question) }
     let!(:answer) { create(:answer, question: question) }
-    let(:body) { Faker::Lorem.paragraph }
-    let(:user) { create(:user) }
+    let(:new_body) { Faker::Lorem.paragraph }
+    let(:not_author) { create(:user) }
 
     context 'authenticated user' do
       context 'author' do
@@ -63,24 +63,18 @@ RSpec.describe AnswersController, type: :controller do
 
         context 'with valid attributes' do
           it 'changes answer attributes' do
-            patch :update, params: { id: answer, answer: { body: body }, format: :js }
+            patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
             answer.reload
-            expect(answer.body).to eq body
+            expect(answer.body).to eq new_body
           end
 
           it 'renders update view' do
-            patch :update, params: { id: answer, answer: { body: 'New body' }, format: :js }
+            patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
             expect(response).to render_template :update
           end
         end
 
         context 'with invalid attributes' do
-          it 'does not change answer attributes' do
-            expect do
-              patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
-            end.to_not change(answer, :body)
-          end
-
           it 'renders update view' do
             patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
             expect(response).to render_template :update
@@ -89,16 +83,16 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'not an author' do
-        before { login(user) }
+        before { login(not_author) }
 
         it 'does not change answer attributes' do
           expect do
-            patch :update, params: { id: answer, answer: { body: body }, format: :js }
+            patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
           end.to_not change(answer, :body)
         end
 
         it 'sees forbidden error' do
-          patch :update, params: { id: answer, answer: { body: body }, format: :js }
+          patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
           expect(response).to have_http_status(:forbidden)
         end
       end
@@ -106,7 +100,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'unauthenticated user' do
       it 'gets asked to authorize' do
-        patch :update, params: { id: answer, answer: { body: body }, format: :js }
+        patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -131,13 +125,9 @@ RSpec.describe AnswersController, type: :controller do
         before { sign_in(create(:user)) }
 
         it 'does not delete the answer' do
-          expect { delete :destroy, params: { question_id: question.id, id: answer.id } }.to_not change(Answer, :count)
+          expect { delete :destroy, params: { question_id: question.id, id: answer.id }, format: :js }.to_not change(Answer, :count)
         end
 
-        it 're-renders the answer\'s question' do
-          delete :destroy, params: { question_id: question.id, id: answer.id }
-          expect(response).to redirect_to question
-        end
       end
     end
 

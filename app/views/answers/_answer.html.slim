@@ -1,4 +1,4 @@
-div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.id == question.best_answer_id)
+div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best?)
   hr
   p= answer.body
   - if current_user&.author_of?(answer)
