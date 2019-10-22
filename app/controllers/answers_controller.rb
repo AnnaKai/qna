@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = question.answers.create(body: params[:body], author: current_user, question_id: question.id)
+    @answer = question.answers.create(body: params[:body], author: current_user)
   end
 
   def update
@@ -18,8 +18,6 @@ class AnswersController < ApplicationController
   def destroy
     if current_user.author_of?(answer)
       answer.destroy
-    else
-      redirect_to question_path(answer.question), notice: 'You\'re not eligible to delete that answer'
     end
   end
 
