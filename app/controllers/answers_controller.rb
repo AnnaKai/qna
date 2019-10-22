@@ -6,17 +6,14 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer = Answer.find(params[:id])
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-      @question = @answer.question
+    if current_user.author_of?(answer)
+      answer.update(answer_params)
+      @question = answer.question
     end
   end
 
   def destroy
-    if current_user.author_of?(answer)
-      answer.destroy
-    end
+    answer.destroy if current_user.author_of?(answer)
   end
 
   private
