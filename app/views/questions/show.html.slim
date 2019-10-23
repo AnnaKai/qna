@@ -9,7 +9,7 @@
         = render 'shared/errors', resource: question
 
       .answers class="py-5"
-        = render question.sorted_answers
+        = render question.answers
 
       - if current_user
         .answer-errors
