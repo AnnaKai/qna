@@ -21,7 +21,7 @@ feature 'User chooses the best answer', %q{
         within first(".answer") do
           expect(page).to have_content answers.second.body
           expect(page).to have_content 'The best answer'
-          expect(page).to_not have_content 'Mark as best'
+          expect(page).to_not have_link 'Mark as best'
         end
       end
     end
@@ -31,17 +31,6 @@ feature 'User chooses the best answer', %q{
         sign_in(user)
         visit question_path(question)
         expect(page).to_not have_content 'Mark as best'
-      end
-    end
-  end
-
-  context 'unauthenicated user' do
-    scenario 'sees the best answer on top' do
-      question.update!(best_answer_id: answers.third.id)
-      visit question_path(question)
-      within first(".answer") do
-        expect(page).to have_content answers.third.body
-        expect(page).to have_content 'The best answer'
       end
     end
   end

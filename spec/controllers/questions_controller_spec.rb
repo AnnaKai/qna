@@ -129,13 +129,11 @@ RSpec.describe QuestionsController, type: :controller do
 
       context 'not an author' do
         before { login(user) }
-        before { patch :update, params: { id: question, question: { title: 'new title', body: 'new body' }, format: :js } }
 
         it 'does not change question attributes' do
-          question.reload
           expect do
             patch :update, params: { id: question, question: { title: 'new title', body: 'new body' }, format: :js }
-          end.to_not change(question, :body)
+          end.to_not change { question.reload.body }
         end
       end
     end
