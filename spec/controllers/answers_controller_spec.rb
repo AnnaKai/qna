@@ -75,8 +75,14 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         context 'with invalid attributes' do
+          before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js } }
+
+          it 'does not change answer' do
+            answer.reload
+            expect(answer.body).to eq answer.body
+          end
+
           it 'renders update view' do
-            patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
             expect(response).to render_template :update
           end
         end
@@ -88,9 +94,8 @@ RSpec.describe AnswersController, type: :controller do
         it 'does not change answer attributes' do
           expect do
             patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
-          end.to_not change(answer, :body)
+          end.to_not change { answer.reload.body }
         end
-
       end
     end
 
@@ -103,7 +108,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not change answer attributes' do
         expect do
           patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
-        end.to_not change(question, :body)
+        end.to_not change(answer, :body)
       end
     end
   end
