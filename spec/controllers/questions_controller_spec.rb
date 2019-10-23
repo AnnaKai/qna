@@ -112,12 +112,11 @@ RSpec.describe QuestionsController, type: :controller do
         end
 
         context 'with invalid attributes' do
-          before { patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js } }
 
           it 'does not change question' do
-            question.reload
-            expect(question.title).to eq(question.title)
-            expect(question.body).to eq('MyText')
+            expect do
+              patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js }
+            end.to_not change { question.reload.body }
           end
 
           it 'renders update view' do
@@ -145,10 +144,9 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'does not change question attributes' do
-        question.reload
         expect do
           patch :update, params: { id: question, question: attributes_for(:question), format: :js }
-        end.to_not change(question, :body)
+        end.to_not change { question.reload.body }
       end
     end
   end
