@@ -5,6 +5,6 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   def best?
-    self == question.best_answer
+    id == question.best_answer_id
   end
 end
