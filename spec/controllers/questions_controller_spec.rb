@@ -116,7 +116,8 @@ RSpec.describe QuestionsController, type: :controller do
           it 'does not change question' do
             expect do
               patch :update, params: { id: question, question: attributes_for(:question, :invalid), format: :js }
-            end.to_not change { question.reload.body }
+              question.reload
+            end.to_not change { question.body }
           end
 
           it 'renders update view' do
@@ -132,7 +133,8 @@ RSpec.describe QuestionsController, type: :controller do
         it 'does not change question attributes' do
           expect do
             patch :update, params: { id: question, question: { title: 'new title', body: 'new body' }, format: :js }
-          end.to_not change { question.reload.body }
+            question.reload
+          end.to_not change { question.body }
         end
       end
     end
@@ -146,7 +148,8 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not change question attributes' do
         expect do
           patch :update, params: { id: question, question: attributes_for(:question), format: :js }
-        end.to_not change { question.reload.body }
+          question.reload
+        end.to_not change { question.body }
       end
     end
   end

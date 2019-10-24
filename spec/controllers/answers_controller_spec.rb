@@ -78,7 +78,8 @@ RSpec.describe AnswersController, type: :controller do
           it 'does not change answer' do
             expect do
               patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), format: :js }
-            end.to_not change { answer.reload.body }
+              answer.reload
+            end.to_not change { answer.body }
           end
 
           it 'renders update view' do
@@ -94,7 +95,8 @@ RSpec.describe AnswersController, type: :controller do
         it 'does not change answer attributes' do
           expect do
             patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
-          end.to_not change { answer.reload.body }
+            answer.reload
+          end.to_not change { answer.body }
         end
       end
     end
@@ -108,7 +110,8 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not change answer attributes' do
         expect do
           patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
-        end.to_not change(answer, :body)
+          answer.reload
+        end.to_not change { answer.body }
       end
     end
   end

@@ -6,14 +6,16 @@ RSpec.describe Answer, type: :model do
 
   it { should validate_presence_of :body }
 
-  describe '#best' do
+  describe '#best?' do
+    let(:question) { create(:question) }
+    let(:answer) { create(:answer, question: question) }
+    let(:best_answer) do
+      create(:answer, question: question).tap { |a| question.update!(best_answer_id: a.id) }
+    end
+
     it 'returns true if answer is the best' do
-      question = create(:question)
-      best_answer = create(:answer, question: question)
-      answer = create(:answer, question: question)
-      question.update(best_answer_id: best_answer.id)
-      expect(best_answer.best?).to eq(true)
-      expect(answer.best?).to eq(false)
+      expect(best_answer).to be_best
+      expect(answer).not_to be_best
     end
   end
 end
