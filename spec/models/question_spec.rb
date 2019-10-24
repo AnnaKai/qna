@@ -8,12 +8,12 @@ RSpec.describe Question, type: :model do
   it { should validate_presence_of :body }
 
   describe '#answers' do
-    it 'the best answer is the first' do
-      question = create(:question)
-      answer = create_list(:answer, 3, question: question)
-      question.update(best_answer_id: answer.second.id)
+    let(:question) { create(:question) }
+    let(:answers) { create_list(:answer, 3, question: question) }
 
-      expect(question.answers.all.to_a).to eq([answer.second, answer.first, answer.last])
+    it 'the best answer is the first' do
+      question.update(best_answer_id: answers.second.id)
+      expect(question.answers.all.to_a).to eq([answers.second, answers.first, answers.last])
     end
   end
 end
