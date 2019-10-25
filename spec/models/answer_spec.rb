@@ -20,6 +20,11 @@ RSpec.describe Answer, type: :model do
       expect(answers.first).not_to be_best
     end
 
+    it 'the best should be the first' do
+      answers.last.best!
+      expect(Answer.all.to_a).to eq([answers.last, best_answer, answers.first, answers.second])
+    end
+
     context 'only one answer is the best' do
       before { answers.first.best! }
 
