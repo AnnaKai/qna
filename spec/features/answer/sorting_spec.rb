@@ -11,7 +11,7 @@ feature 'User sees the best answer', %q{
 
   context 'user' do
     scenario 'sees the best answer on top' do
-      question.update!(best_answer_id: answers.third.id)
+      answers.third.best!
       visit question_path(question)
       within first(".answer") do
         expect(page).to have_content answers.third.body

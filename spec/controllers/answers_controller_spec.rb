@@ -116,6 +116,19 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #best' do
+    let(:question) { create(:question) }
+    let(:answer) { create(:answer, question: question) }
+
+    before { login(question.author) }
+
+    it 'mark answer as best' do
+      patch :best, params: { question_id: question, id: answer }, format: :js
+      answer.reload
+      expect(answer).to be_best
+    end
+  end
+
   describe 'DELETE #destroy' do
     let(:question) { create(:question) }
     let!(:answer) { create(:answer, question: question, author: user) }
