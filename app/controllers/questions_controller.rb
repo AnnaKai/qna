@@ -54,6 +54,6 @@ class QuestionsController < ApplicationController
   helper_method :question, :user_question
 
   def question_params
-    params.require(:question).permit(:title, :body, :best_answer_id)
+    params.require(:question).permit(:title, :body)
   end
 end

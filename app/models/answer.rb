@@ -4,7 +4,10 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
-  def best?
-    id == question.best_answer_id
+  def best!
+    transaction do
+      question.answers.update_all(best: false)
+      update!(best: true)
+    end
   end
 end

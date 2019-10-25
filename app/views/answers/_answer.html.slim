@@ -1,12 +1,12 @@
-div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best?)
+div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best)
   hr
   p= answer.body
   - if current_user&.author_of?(answer)
     = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
     = link_to 'Delete', answer, method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: 'delete-answer'
 
-  - if current_user&.author_of?(question)
-    = link_to 'Mark as best', question, method: :patch, class: 'btn btn-primary choose-answer', remote: true, data: {params: "question[best_answer_id]=#{answer.id}", answer_id: answer.id}
+  - if current_user&.author_of?(answer.question)
+    = link_to 'Mark as best', best_answer_path(answer), method: :patch, class: 'btn btn-primary choose-answer', remote: true
 
   span.best The best answer
 
