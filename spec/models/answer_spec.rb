@@ -6,16 +6,26 @@ RSpec.describe Answer, type: :model do
 
   it { should validate_presence_of :body }
 
-  describe '#best?' do
+  describe 'best' do
     let(:question) { create(:question) }
-    let(:answer) { create(:answer, question: question) }
-    let(:best_answer) do
-      create(:answer, question: question).tap { |a| question.update!(best_answer_id: a.id) }
+    let(:answers) { create_list(:answer, 3, question: question) }
+    let!(:best_answer) { create(:answer, question: question, best: true) }
+
+    it 'mark answer as the best' do
+      answers.first.best!
+      expect(answers.first).to be_best
     end
 
-    it 'returns true if answer is the best' do
-      expect(best_answer).to be_best
-      expect(answer).not_to be_best
+    it 'should not be the best' do
+      expect(answers.first).not_to be_best
+    end
+
+    context 'only one answer is the best' do
+      before { answers.first.best! }
+
+      it { expect(best_answer.reload).to_not be_best }
+      it { expect(answers.first.reload).to be_best }
     end
   end
+
 end

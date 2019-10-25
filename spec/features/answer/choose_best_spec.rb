@@ -16,10 +16,12 @@ feature 'User chooses the best answer', %q{
         sign_in(question.author)
         visit question_path(question)
 
-        find(".choose-answer[data-answer-id=\"#{answers.second.id}\"]").click
+        within all('.answer').last do
+          find('.choose-answer').click
+        end
 
         within first(".answer") do
-          expect(page).to have_content answers.second.body
+          expect(page).to have_content answers.last.body
           expect(page).to have_content 'The best answer'
           expect(page).to_not have_link 'Mark as best'
         end
