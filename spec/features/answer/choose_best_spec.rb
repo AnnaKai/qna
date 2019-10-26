@@ -26,11 +26,18 @@ feature 'User chooses the best answer', %q{
           expect(page).to_not have_link 'Mark as best'
         end
       end
+
+      context 'not an author' do
+        scenario 'can not select the best answer' do
+          sign_in(user)
+          visit question_path(question)
+          expect(page).to_not have_content 'Mark as best'
+        end
+      end
     end
 
-    context 'not an author' do
+    context 'unauthenticated user' do
       scenario 'can not select the best answer' do
-        sign_in(user)
         visit question_path(question)
         expect(page).to_not have_content 'Mark as best'
       end

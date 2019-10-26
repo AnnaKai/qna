@@ -119,14 +119,38 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #best' do
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question) }
+    let(:not_author) { create(:user) }
 
-    before { login(question.author) }
+    context 'authenticated' do
+      context 'author' do
+        before { login(question.author) }
 
-    it 'mark answer as best' do
-      patch :best, params: { question_id: question, id: answer }, format: :js
-      answer.reload
-      expect(answer).to be_best
+        it 'marks answer as best' do
+          patch :best, params: { question_id: question, id: answer }, format: :js
+          answer.reload
+          expect(answer).to be_best
+        end
+      end
+
+      context 'not an author' do
+        before { login(not_author) }
+
+        it 'cannot mark the answer as best' do
+          patch :best, params: { question_id: question, id: answer }, format: :js
+          answer.reload
+          expect(answer).to_not be_best
+        end
+      end
     end
+
+    context 'unauthenticated' do
+      it 'cannot mark the answer as best' do
+        patch :best, params: { question_id: question, id: answer }, format: :js
+        answer.reload
+        expect(answer).to_not be_best
+      end
+    end
+
   end
 
   describe 'DELETE #destroy' do
