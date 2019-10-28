@@ -1,6 +1,10 @@
 div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best?)
   hr
   p= answer.body
+  - if answer.files.attached?
+    - answer.files.each do |file|
+      = link_to file.filename.to_s, url_for(file)
+
   - if current_user&.author_of?(answer)
     = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
     = link_to 'Delete', answer, method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: 'delete-answer'
@@ -13,4 +17,5 @@ div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best?)
   = form_with model: answer, class: 'd-none', html: { id: "edit-answer-#{answer.id}" } do |f|
     = f.label :body, 'Your corrected answer'
     = f.text_area :body
+
     = f.submit 'Submit'

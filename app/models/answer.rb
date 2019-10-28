@@ -3,6 +3,8 @@ class Answer < ApplicationRecord
   belongs_to :author, class_name: "User", foreign_key: :user_id
   validates :body, presence: true
 
+  has_many_attached :files
+
   default_scope { order(best: :desc) }
 
   def best!

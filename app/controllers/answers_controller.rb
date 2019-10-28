@@ -2,7 +2,9 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = question.answers.create(body: params[:body], author: current_user)
+    @answer = question.answers.new(answer_params)
+    @answer.author = current_user
+    @answer.save
   end
 
   def update
@@ -23,7 +25,7 @@ class AnswersController < ApplicationController
   private
 
   def answer
-    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
+    @answer ||= params[:id] ? Answer.with_attached_files.find(params[:id]) : Answer.new
   end
 
   def question
@@ -33,7 +35,7 @@ class AnswersController < ApplicationController
   helper_method :answer, :question
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 
 end
