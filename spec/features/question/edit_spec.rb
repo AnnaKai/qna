@@ -50,7 +50,7 @@ feature 'User can edit their question', %q{
         expect(page).to have_link 'spec_helper.rb'
       end
 
-      scenario 'deletes files' do
+      scenario 'deletes files', js: true do
         within('.question') do
           first('.file').click_on 'Delete Attachment'
         end
