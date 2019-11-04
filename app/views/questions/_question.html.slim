@@ -3,7 +3,7 @@ p= question.body
 - if question.files.attached?
   - question.files.each do |file|
     .file
-      p= link_to 'Delete', attachment_path(file), method: :delete, remote: true
+      span= link_to 'Delete Attachment', attachment_path(file), method: :delete, remote: true
       p= link_to file.filename.to_s, url_for(file)
 
 - if current_user&.author_of?(question)
@@ -12,6 +12,9 @@ p= question.body
   = form_with model: question, class: 'd-none' do |f|
     = f.label :title
     = f.text_field :title
+
+    = f.label :files
+    = f.file_field :files, multiple: true
 
     = f.label :body
     = f.text_area :body
