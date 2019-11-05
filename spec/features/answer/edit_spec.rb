@@ -34,6 +34,44 @@ feature 'User can edit his answer', %q{
       end
     end
 
+    context 'edits an answer with attached files', js: true do
+      background do
+        sign_in(answers.first.author)
+        visit question_path(question)
+
+        find(".edit-answer-link[data-answer-id=\"#{answers.first.id}\"]").click
+
+        within '.answers' do
+          attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Submit'
+        end
+      end
+
+      scenario 'adds multiple files at once', js: true do
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+
+      scenario 'deletes attached files', js: true do
+        within first('.file') do
+          click_on 'Delete Attachment'
+        end
+
+        expect(page).to_not have_link 'rails_helper.rb'
+      end
+    end
+
+    scenario "not an author can't see attachments' links" do
+      answer = create(:answer, files: [fixture_file_upload("#{Rails.root}/spec/rails_helper.rb")] )
+
+      sign_in(create(:user))
+      visit question_path(answer.question)
+
+      within first('.file')  do
+        expect(page).to_not have_link 'Delete'
+      end
+    end
+
     scenario 'edits his answer with errors', js: true do
       sign_in(answers.first.author)
       visit question_path(question)
