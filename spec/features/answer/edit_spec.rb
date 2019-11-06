@@ -52,6 +52,19 @@ feature 'User can edit his answer', %q{
         expect(page).to have_link 'spec_helper.rb'
       end
 
+      scenario 'adds more files without replacing already attached' do
+        find(".edit-answer-link[data-answer-id=\"#{answers.first.id}\"]").click
+
+        within '.answers' do
+          attach_file 'Files', ["#{Rails.root}/public/404.html"]
+          click_on 'Submit'
+        end
+
+        expect(page).to have_link '404.html'
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+
       scenario 'deletes attached files', js: true do
         within first('.file') do
           click_on 'Delete Attachment'
