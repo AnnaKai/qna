@@ -20,6 +20,11 @@ class QuestionsController < ApplicationController
     @question.author = current_user
 
     if @question.save
+      if params[:question][:files].present?
+        params[:question][:files].each do |file|
+          @question.files.attach(file)
+        end
+      end
       redirect_to @question, notice: 'Your question has been successfully created.'
     else
       render :new
@@ -28,6 +33,11 @@ class QuestionsController < ApplicationController
 
   def update
     if current_user.author_of?(question)
+      if params[:question][:files].present?
+        params[:question][:files].each do |file|
+          @question.files.attach(file)
+        end
+      end
       question.update(question_params)
     end
   end
@@ -54,6 +64,6 @@ class QuestionsController < ApplicationController
   helper_method :question, :user_question
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body)
   end
 end

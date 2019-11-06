@@ -50,6 +50,18 @@ feature 'User can edit their question', %q{
         expect(page).to have_link 'spec_helper.rb'
       end
 
+      scenario 'adds more files without replacing already attached' do
+        within '.question' do
+          click_on 'Edit'
+          attach_file 'Files', ["#{Rails.root}/public/404.html"]
+          click_on 'Update'
+        end
+
+        expect(page).to have_link '404.html'
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+
       scenario 'deletes files', js: true do
         within('.question') do
           first('.file').click_on 'Delete Attachment'
