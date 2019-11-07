@@ -63,6 +63,8 @@ feature 'User can edit their question', %q{
       end
 
       scenario 'deletes files', js: true do
+        expect(page).to have_link 'rails_helper.rb'
+
         within('.question') do
           first('.file').click_on 'Delete Attachment'
         end
