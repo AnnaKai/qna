@@ -66,11 +66,14 @@ feature 'User can edit his answer', %q{
       end
 
       scenario 'deletes attached files', js: true do
+        expect(page).to have_link 'rails_helper.rb'
+
         within first('.file') do
           click_on 'Delete Attachment'
         end
 
         expect(page).to_not have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
       end
     end
 
