@@ -33,5 +33,16 @@ RSpec.describe AttachmentsController, type: :controller do
         end
       end
     end
+
+   context 'unauthenticated user' do
+     it 'can not delete attached files' do
+       expect { delete :destroy, params: { id: question.files.first }, format: :js }.to_not change(question.files, :count)
+     end
+
+     it 'render destroy' do
+       delete :destroy, params: { id: question.files.first }, format: :js
+       expect(response).to have_http_status(401)
+     end
+   end
   end
 end
