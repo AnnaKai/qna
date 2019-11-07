@@ -35,16 +35,13 @@ feature 'User can edit his answer', %q{
     end
 
     context 'edits an answer with attached files', js: true do
+      let(:file) { fixture_file_upload("#{Rails.root}/spec/rails_helper.rb") }
+      let(:file2) { fixture_file_upload("#{Rails.root}/spec/spec_helper.rb") }
+      let(:answer) { create(:answer, files: [file, file2], question: question ) }
+
       background do
-        sign_in(answers.first.author)
+        sign_in(answer.author)
         visit question_path(question)
-
-        find(".edit-answer-link[data-answer-id=\"#{answers.first.id}\"]").click
-
-        within '.answers' do
-          attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb","#{Rails.root}/spec/spec_helper.rb"]
-          click_on 'Submit'
-        end
       end
 
       scenario 'adds multiple files at once', js: true do
@@ -53,7 +50,7 @@ feature 'User can edit his answer', %q{
       end
 
       scenario 'adds more files without replacing already attached' do
-        find(".edit-answer-link[data-answer-id=\"#{answers.first.id}\"]").click
+        find(".edit-answer-link[data-answer-id=\"#{answer.id}\"]").click
 
         within '.answers' do
           attach_file 'Files', ["#{Rails.root}/public/404.html"]

@@ -34,15 +34,13 @@ feature 'User can edit their question', %q{
     end
 
     context 'author edits their question with attached files', js: true do
+      let(:file) { fixture_file_upload("#{Rails.root}/spec/rails_helper.rb") }
+      let(:file2) { fixture_file_upload("#{Rails.root}/spec/spec_helper.rb") }
+
       background do
+        question = create(:question, files: [file, file2] )
         sign_in(question.author)
         visit question_path(question)
-
-        within '.question' do
-          click_on 'Edit'
-          attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
-          click_on 'Update'
-        end
       end
 
       scenario 'adds files' do
