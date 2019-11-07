@@ -5,17 +5,22 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     let(:question) { create(:question) }
     let(:body) { Faker::Lorem.paragraph }
+    let(:file) { fixture_file_upload("#{Rails.root}/spec/rails_helper.rb") }
 
     context 'authenticated user' do
       let(:user) { create(:user) }
       before { sign_in(user) }
 
       context 'with valid attributes' do
+        it 'uploads the file' do
+          expect { post :create, params: { question_id: question.id, answer: { body: body, files: [file] } }, format: :js }.to change{ ActiveStorage::Attachment.count }.by(1)
+        end
+
         it 'saves a new answer in the db' do
           expect { post :create, params: { question_id: question.id, answer: { body: body } }, format: :js }.to change { question.answers.count }.by(1)
         end
 
-        it 'saved answer has correct values including an author' do
+        it 'saved answer has correct author value' do
           post :create, params: { question_id: question.id, answer: { body: body } }, format: :js
           expect(Answer.last).to have_attributes(body: body, user_id: user.id)
         end
@@ -56,14 +61,19 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer) { create(:answer, question: question) }
     let(:new_body) { Faker::Lorem.paragraph }
     let(:not_author) { create(:user) }
+    let(:file) { fixture_file_upload("#{Rails.root}/spec/rails_helper.rb") }
 
     context 'authenticated user' do
       context 'author' do
         before { login(answer.author) }
 
         context 'with valid attributes' do
+          it 'should upload the file' do
+            expect { patch :update, params: { id: answer, answer: { body: new_body, files: [file] } }, format: :js }.to change{ ActiveStorage::Attachment.count }.by(1)
+          end
+
           it 'changes answer attributes' do
-            patch :update, params: { id: answer, answer: { body: new_body }, format: :js }
+            patch :update, params: { id: answer, answer: { body: new_body} , format: :js }
             answer.reload
             expect(answer.body).to eq new_body
           end
