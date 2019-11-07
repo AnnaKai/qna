@@ -4,21 +4,11 @@ class AnswersController < ApplicationController
   def create
     @answer = question.answers.new(answer_params)
     @answer.author = current_user
-    if params[:answer][:files].present?
-      params[:answer][:files].each do |file|
-        @answer.files.attach(file)
-      end
-    end
     @answer.save
   end
 
   def update
     if current_user.author_of?(answer)
-      if params[:answer][:files].present?
-        params[:answer][:files].each do |file|
-          answer.files.attach(file)
-        end
-      end
       answer.update(answer_params)
       @question = answer.question
     end
@@ -45,7 +35,7 @@ class AnswersController < ApplicationController
   helper_method :answer, :question
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 
 end
