@@ -81,7 +81,7 @@ feature 'User can edit his answer', %q{
       visit question_path(answer.question)
 
       within first('.file')  do
-        expect(page).to_not have_link 'Delete'
+        expect(page).to_not have_link 'Delete Attachment'
       end
     end
 
