@@ -16,20 +16,20 @@
         = render 'shared/errors', resource: @answer
 
         = form_with model: [question, @answer], class: 'new-answer' do |f|
-          = f.label :body, 'Answer'
-          = f.text_area :body
+          p= f.label :body, 'Answer'
+          = f.text_area :body, class: 'form-control'
 
-          = f.label :files
-          = f.file_field :files, multiple: true, direct_upload: true
+          p= f.label :files
+          = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
 
-          p Links
+          p.form-group Links
           = f.fields_for :links do |l|
             = l.label :name, 'Link name'
-            = l.text_field :name
+            = l.text_field :name, class: 'form-control'
 
             = l.label :url
-            = l.text_field :url
+            = l.text_field :url, class: 'form-control'
 
-          = f.submit 'Submit'
+          p= f.submit 'Submit', class: 'btn btn-success my-4'
       - else
         p You need to sign in or sign up before continuing.
