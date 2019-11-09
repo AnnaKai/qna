@@ -22,13 +22,7 @@
           p= f.label :files
           = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
 
-          p.form-group Links
-          = f.fields_for :links do |l|
-            = l.label :name, 'Link name'
-            = l.text_field :name, class: 'form-control'
-
-            = l.label :url
-            = l.text_field :url, class: 'form-control'
+          = render 'shared/links_form', form: f
 
           p= f.submit 'Submit', class: 'btn btn-success my-4'
       - else

@@ -26,4 +26,6 @@ div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best?)
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
 
+    = render 'shared/links_form', form: f
+
     = f.submit 'Submit', class: 'btn btn-primary'

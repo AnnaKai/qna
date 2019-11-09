@@ -1,0 +1,7 @@
+p.form-group Add Links
+= form.fields_for :links do |l|
+  = l.label :name, 'Link name'
+  = l.text_field :name, class: 'form-control'
+
+  = l.label :url
+  = l.text_field :url, class: 'form-control'
