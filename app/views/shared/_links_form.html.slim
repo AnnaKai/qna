@@ -1,7 +1,6 @@
-p.form-group Add Links
-= form.fields_for :links do |l|
-  = l.label :name, 'Link name'
-  = l.text_field :name, class: 'form-control'
-
-  = l.label :url
-  = l.text_field :url, class: 'form-control'
+p.form-group Add Links:
+.links
+  = form.fields_for :links do |f|
+    = render 'shared/link_fields', f: f
+.add_link
+  = link_to_add_association 'Add link', form, :links, partial: 'shared/link_fields'
