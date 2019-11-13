@@ -10,13 +10,18 @@ RSpec.describe Answer, type: :model do
   it { should validate_presence_of :body }
 
   describe 'best' do
-    let(:question) { create(:question) }
+    let(:question) { create(:question, :with_reward) }
     let(:answers) { create_list(:answer, 3, question: question) }
     let!(:best_answer) { create(:answer, question: question, best: true) }
 
     it 'mark answer as the best' do
       answers.first.best!
       expect(answers.first).to be_best
+    end
+
+    it 'checks the rewarded user is the best answer\'s author' do
+      answers.first.best!
+      expect(question.reward.user).to eq answers.first.author
     end
 
     it 'should not be the best' do

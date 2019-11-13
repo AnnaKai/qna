@@ -7,5 +7,9 @@ FactoryBot.define do
     trait :invalid do
       title { nil }
     end
+
+    trait :with_reward do
+      reward { create(:reward) }
+    end
   end
 end

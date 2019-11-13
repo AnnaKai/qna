@@ -1,0 +1,8 @@
+h1 User profile
+h3 Rewards
+.rewards
+  - current_user.rewards.each do |reward|
+    = image_tag(url_for(reward.image))
+    = reward.name
+    = reward.question.title
+    
