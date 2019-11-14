@@ -5,8 +5,7 @@ div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best?)
     - if answer.links.exists?
       = render 'shared/links', links: answer.links
 
-  - if answer.files.attached?
-    = render 'shared/attachments', attachments: answer.files, resource: answer
+  = render 'shared/attachments', attachments: answer.files, resource: answer
 
   - if current_user&.author_of?(answer)
     = link_to 'Edit', '#', class: 'edit-answer-link btn btn-primary mr-2', data: { answer_id: answer.id }

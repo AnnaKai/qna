@@ -15,6 +15,8 @@ feature 'User can delete links', %q{
 
     visit question_path(answer.question)
 
+    expect(page).to have_link link.name, href: link.url
+
     within first('.answer') do
       click_on 'Edit'
       

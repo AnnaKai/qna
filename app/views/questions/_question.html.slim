@@ -1,7 +1,9 @@
 h1= question.title
 p= question.body
-- if question.files.attached?
-  = render 'shared/attachments', attachments: question.files, resource: question
+p Reward for the best answer:
+= image_tag(url_for(question.reward.image), class: 'reward')
+
+= render 'shared/attachments', attachments: question.files, resource: question
 
 = render 'shared/links', links: question.links
 

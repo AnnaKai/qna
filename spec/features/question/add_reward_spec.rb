@@ -26,6 +26,7 @@ feature 'User can add reward to their question', %q(
       click_on 'Ask'
 
       expect(page).to have_content 'Your question has been successfully created'
+      expect(page.find('.reward')['src']).to have_content 'reward.jpg'
     end
 
     scenario 'adds invalid reward name without an image' do

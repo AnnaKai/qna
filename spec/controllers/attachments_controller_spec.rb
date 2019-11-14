@@ -23,7 +23,7 @@ RSpec.describe AttachmentsController, type: :controller do
       context 'is not an author' do
         before { login(create(:user)) }
 
-        it 'remove attachments to the resource' do
+        it 'removes files of the resource' do
           expect { delete :destroy, params: { id: question.files.first }, format: :js }.to_not change(question.files.attachments, :count)
         end
 

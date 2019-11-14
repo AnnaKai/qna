@@ -15,6 +15,8 @@ feature 'User can edit question links', %q(
       sign_in(question.author)
       visit question_path(question)
 
+      expect(page).to have_link 'Link_name', href: 'Link_url'
+
       within '.question' do
         click_on 'Edit'
 
