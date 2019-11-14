@@ -14,11 +14,4 @@ RSpec.describe Link, type: :model do
     it { expect(google_link).to_not be_gist }
   end
 
-  describe '#gist' do
-    let!(:gist_link) { build(:link, url: 'https://gist.github.com/lorenadl/a1eb26efdf545b4b2b9448086de3961d') }
-
-    it { expect(gist_link.gist).to be_a_kind_of Array }
-    it { expect(gist_link.gist.first).to include(name: 'rails_active_storage_how_to_validate_file_type.md') }
-  end
-
 end

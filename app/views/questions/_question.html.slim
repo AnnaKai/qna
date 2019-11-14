@@ -1,7 +1,8 @@
 h1= question.title
 p= question.body
 p Reward for the best answer:
-= image_tag(url_for(question.reward.image), class: 'reward')
+- if question.reward
+  = image_tag(url_for(question.reward.image), class: 'reward')
 
 = render 'shared/attachments', attachments: question.files, resource: question
 

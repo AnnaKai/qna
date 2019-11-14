@@ -21,7 +21,7 @@ gem 'jquery-rails'
 gem 'aws-sdk', '~> 3'
 
 gem "cocoon", '~> 1.2.14'
-gem "octokit", "~> 4.0"
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
