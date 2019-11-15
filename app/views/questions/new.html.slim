@@ -8,6 +8,18 @@
   = f.text_area :body
 
   = f.label :files
-  = f.file_field :files, multiple: true
+  = f.file_field :files, multiple: true, direct_upload: true
+
+  .reward
+    p Reward
+    = f.fields_for :reward do |r|
+
+      = r.label :name, 'Reward Title'
+      = r.text_field :name
+
+      = r.label :image
+      = r.file_field :image, direct_upload: true
+
+  = render 'shared/links_form', form: f
 
   = f.submit 'Ask'

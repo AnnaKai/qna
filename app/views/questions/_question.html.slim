@@ -1,18 +1,33 @@
 h1= question.title
 p= question.body
-- if question.files.attached?
-  = render 'shared/attachments', attachments: question.files, resource: question
+p Reward for the best answer:
+- if question.reward
+  = image_tag(url_for(question.reward.image), class: 'reward')
+
+= render 'shared/attachments', attachments: question.files, resource: question
+
+= render 'shared/links', links: question.links
 
 - if current_user&.author_of?(question)
   = link_to 'Delete question', question_path(question), method: :delete
   = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
+
   = form_with model: question, class: 'd-none' do |f|
-    = f.label :title
-    = f.text_field :title
+    .field
+      = f.label :title
+      = f.text_field :title
+    .field
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
+    .field
+      = f.label :body
+      = f.text_area :body
 
-    = f.label :files
-    = f.file_field :files, multiple: true, direct_upload: true
+      = render 'shared/links_form', form: f
 
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Update'
+      = f.submit 'Update'
+
+
+
+
+

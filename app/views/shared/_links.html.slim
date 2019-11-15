@@ -1,0 +1,7 @@
+p Links:
+ul.links
+  - links.each do |link|
+    - if link.gist?
+      div data-gist="#{link.gist_id}"
+    - else
+      = link_to link.name, link.url

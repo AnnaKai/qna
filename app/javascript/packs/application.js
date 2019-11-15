@@ -18,3 +18,4 @@ require('utilities')
 // const imagePath = (name) => images(name, true)
 import 'bootstrap'
 import './src/application.scss'
+import 'cocoon'

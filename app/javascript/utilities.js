@@ -18,3 +18,9 @@ $(document).on('turbolinks:load', function() {
         $('.question form').removeClass('d-none');
     });
 });
+
+(function (window, document) {
+    document.addEventListener('DOMContentLoaded', function () {
+        window.gistAsync();
+    })
+})(window, document);
