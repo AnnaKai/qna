@@ -6,4 +6,8 @@ class Link < ApplicationRecord
   def gist?
     url.include?('gist.github.com')
   end
+
+  def gist_id
+    url.sub('https://gist.github.com/', '')
+  end
 end
