@@ -8,6 +8,12 @@ p Reward for the best answer:
 
 = render 'shared/links', links: question.links
 
+.rating 0
+- if current_user && !(current_user&.author_of?(question))
+  button Vote up
+  button Vote down
+
+.question-options
 - if current_user&.author_of?(question)
   = link_to 'Delete question', question_path(question), method: :delete
   = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
