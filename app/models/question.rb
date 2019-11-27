@@ -2,6 +2,7 @@ class Question < ApplicationRecord
   belongs_to :author, class_name: "User", foreign_key: :user_id
   has_many :answers, dependent: :destroy
   include Linkable
+  include Votable
 
   has_many_attached :files
   has_one :reward, dependent: :destroy

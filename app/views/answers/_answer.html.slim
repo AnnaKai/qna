@@ -1,9 +1,15 @@
-div.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best?)
+.answer.mb-4 id="answer-#{answer.id}" class=('best' if answer.best?)
   hr
   p= answer.body
   .links
     - if answer.links.exists?
       = render 'shared/links', links: answer.links
+
+  .rating
+    = answer.rating
+  - if current_user && !(current_user&.author_of?(answer))
+    = link_to 'Like', polymorphic_url([:vote_up, answer]), method: :post, remote: true, class: 'vote btn btn-light'
+    = link_to 'Dislike', polymorphic_url([:vote_down, answer]), method: :post, remote: true, class: 'vote btn btn-light'
 
   = render 'shared/attachments', attachments: answer.files, resource: answer
 
