@@ -4,6 +4,8 @@ RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
   let(:question) { create(:question) }
 
+  include_examples 'voted controller'
+
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
 
