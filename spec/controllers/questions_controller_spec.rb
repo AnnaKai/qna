@@ -12,6 +12,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { get :index }
 
     it 'populates an array of all questions' do
+      Question.destroy_all
       expect(assigns(:questions)).to match_array(questions)
     end
 
