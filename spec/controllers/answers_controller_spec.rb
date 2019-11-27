@@ -2,13 +2,15 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
 
+  include_examples 'voted controller'
+
   describe 'POST #create' do
     let(:question) { create(:question) }
     let(:body) { Faker::Lorem.paragraph }
     let(:file) { fixture_file_upload("#{Rails.root}/spec/rails_helper.rb") }
 
     context 'authenticated user' do
-      let(:user) { create(:user) }
+      let!(:user) { create(:user) }
       before { sign_in(user) }
 
       context 'with valid attributes' do
@@ -22,7 +24,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'saved answer has correct author value' do
           post :create, params: { question_id: question.id, answer: { body: body } }, format: :js
-          expect(Answer.last).to have_attributes(body: body, user_id: user.id)
+          expect(question.answers.last).to have_attributes(body: body, author: user)
         end
 
         it 'redirects to show view' do
@@ -44,13 +46,12 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'unauthenticated user' do
-      before { post :create, params: { question_id: question.id, answer: { body: body } } }
-
       it 'does not save an answer' do
-        expect(Answer.count).to eq(0)
+        expect { post :create, params: { question_id: question.id, answer: { body: body } }, format: :js }.to_not change { Answer.count }
       end
 
       it 'gets asked to authorize' do
+        post :create, params: { question_id: question.id, answer: { body: body } }
         expect(response).to redirect_to(new_user_session_path)
       end
     end
