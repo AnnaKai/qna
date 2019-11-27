@@ -1,37 +1,39 @@
-h1= question.title
-p= question.body
-p Reward for the best answer:
-- if question.reward
-  = image_tag(url_for(question.reward.image), class: 'reward')
+.question id="question-#{question.id}"
+  h1= question.title
+  p= question.body
+  p Reward for the best answer:
+  - if question.reward
+    = image_tag(url_for(question.reward.image), class: 'reward')
 
-= render 'shared/attachments', attachments: question.files, resource: question
+  = render 'shared/attachments', attachments: question.files, resource: question
 
-= render 'shared/links', links: question.links
+  = render 'shared/links', links: question.links
 
-.rating 0
-- if current_user && !(current_user&.author_of?(question))
-  button Vote up
-  button Vote down
+  .rating
+    = question.rating
+  - if current_user && !(current_user&.author_of?(question))
+    = link_to 'Like', polymorphic_url([:vote_up, question]), method: :post, remote: true, class: 'vote btn btn-light'
+    = link_to 'Dislike', polymorphic_url([:vote_down, question]), method: :post, remote: true, class: 'vote btn btn-light'
 
-.question-options
-- if current_user&.author_of?(question)
-  = link_to 'Delete question', question_path(question), method: :delete
-  = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
+  .question-options
+  - if current_user&.author_of?(question)
+    = link_to 'Delete question', question_path(question), method: :delete
+    = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
 
-  = form_with model: question, class: 'd-none' do |f|
-    .field
-      = f.label :title
-      = f.text_field :title
-    .field
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
-    .field
-      = f.label :body
-      = f.text_area :body
+    = form_with model: question, class: 'd-none' do |f|
+      .field
+        = f.label :title
+        = f.text_field :title
+      .field
+        = f.label :files
+        = f.file_field :files, multiple: true, direct_upload: true
+      .field
+        = f.label :body
+        = f.text_area :body
 
-      = render 'shared/links_form', form: f
+        = render 'shared/links_form', form: f
 
-      = f.submit 'Update'
+        = f.submit 'Update'
 
 
 

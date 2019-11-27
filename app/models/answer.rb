@@ -2,6 +2,7 @@ class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :author, class_name: "User", foreign_key: :user_id
   include Linkable
+  include Votable
 
   has_one :reward
   has_many_attached :files
